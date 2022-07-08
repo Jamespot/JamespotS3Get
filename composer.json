@@ -1,0 +1,7 @@
+{
+    "name": "Jamespot S3 Get",
+    "description": "Jamespot PHP Script to get files from S3 backup",
+    "require": {
+        "php-opencloud/openstack": "^3.2"
+    }
+}
