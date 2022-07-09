@@ -24,7 +24,7 @@ Edit config.php according to your production values
 php getFileData.php xx  > /tmp/xx.binary
 
 ```
-This will pull the data of file 'xx' out of your S3 repo and store it in /tmp/xx
+This will pull the data of file 'xx' out of your S3 repo and store it in /tmp/xx.binary
 
 
 ## Notice
