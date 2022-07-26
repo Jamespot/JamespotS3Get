@@ -9,8 +9,8 @@ $osAccess = new OpenstackAccess($config);
 
 $osAccess->initClient();
 
-echo($osAccess->list());
-
+$res = $osAccess->list();
+echo(type($res));
 #for ($i = 1; $i <= 10; $i++) {
 #    echo $i;
 #}
