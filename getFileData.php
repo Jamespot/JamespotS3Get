@@ -9,4 +9,4 @@ $osAccess = new OpenstackAccess($config);
 
 $osAccess->initClient();
 
-echo($osAccess->getFileData($argv[0]));
+echo($osAccess->getFileData($argv[1]));
