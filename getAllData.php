@@ -18,11 +18,42 @@ if (isset($config) and is_object($config)) {
     $containerDirectoryPath = 'data/' . $config->containerName;
     foreach ($directories as $directory) {
         if ($directory->isDir() && !$directory->isDot()) {
+            //var_dump($directory);
             if (is_dir($directory->getPathname())) {
+                //echo "dans if isdir
+               // ";
+                //var_dump($directory->getPathname());
                 $files = new DirectoryIterator($directory->getPathname());
+
                 foreach ($files as $file) {
+                    //var_dump($file);
                     if ($file->isFile()) {
+                       // echo "dans is file
+                        //";
+                        //var_dump($file->getFilename());
                         $objects[$directory->getFilename()] = $file->getFilename();
+                    } else {
+                       // echo "dans else
+                       // ";
+                        //var_dump($file->getFilename());
+                        if ($file->isDir()) {
+                           // echo "is DIR
+                           // ";
+                            $filesNv1 = new DirectoryIterator($file->getPathName());
+                            foreach ($filesNv1 as $fileNv1) {
+                                if ($fileNv1->isFile()) {
+                                    //echo "dans is file
+                        //";
+                                    //var_dump($fileNv1->getFilename());
+                                    $objects[$file->getFilename()] = $fileNv1->getFilename();
+                                } else {
+                                   // echo "dans else
+                                     
+                                   // ";
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -36,19 +67,34 @@ if (isset($config) and is_object($config)) {
         mkdir($containerDirectoryPath);
     }
 
+    //echo($osAccess->getFileData($argv[1]));
     try {
         if (class_exists('ZipArchive')) {
             $zip = new ZipArchive();
             $zip->open('./data.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
             foreach ($objects as $objectName => $fileName) {
-                $fileData = $osAccess->getFileData($objectName);
-                $filePath = $containerDirectoryPath . '/' . $objectName;
-                if (!is_dir($filePath)) {
-                    mkdir($filePath);
+                //var_dump($objectName);
+                //var_dump($fileName);
+                echo "Trying $objectName ...";
+                try {
+                    $fileData = $osAccess->getFileData($objectName);
+                    echo "Ok";
+                    echo "
+                    ";
+                    $filePath = $containerDirectoryPath . '/' . $objectName;
+                    if (!is_dir($filePath)) {
+                        mkdir($filePath);
+                    }
+                    $fullPath = $filePath . '/' . $fileName;
+
+                    file_put_contents($fullPath, $fileData);
+                    $zip->addFile($fullPath);
+                } catch (Exception $e) {
+                    echo "Error $objectName";
+                    echo "
+                    ";
                 }
-                $fullPath = $filePath . '/' . $fileName;
-                file_put_contents($fullPath, $fileData);
-                $zip->addFile($fullPath);
+
             }
             $zip->close();
             $zip = new ZipArchive();

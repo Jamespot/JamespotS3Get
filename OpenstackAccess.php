@@ -146,7 +146,14 @@ class OpenstackAccess
 
     public function getFileData($id)
     {
-        return $this->_getData($this->containerFilename($id))->getContents();
+        //if ($this->_getData($this->containerFilename($id)))
+        try {
+            return $this->_getData($this->containerFilename($id))->getContents();
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        //return false;
     }
 
     public function getObject($name)
@@ -156,7 +163,12 @@ class OpenstackAccess
 
     public function _getData($name)
     {
-        return $this->getObject($name)->download();
+        try {
+            $data = $this->getObject($name)->download();
+        } catch (Exception $e) {
+            throw $e;
+        }
+        return $data;
     }
 
     public function list($params = [])
