@@ -132,18 +132,27 @@ class OpenstackAccess
 
     /** ------------------------------------ Container functions ---------------------------------------**/
     /**
-     * return string
+     * @param integer $id
+     * @return string
      */
     private function containerFilename($id)
     {
         return 'upload/' . $id;
     }
 
+    /**
+     * @param integer $id
+     * @return \OpenStack\ObjectStore\v1\Models\StorageObject
+     */
     public function getFileObject($id)
     {
         return $this->getObject($this->containerFilename($id));
     }
 
+    /**
+     * @param integer $id
+     * @return string|void
+     */
     public function getFileData($id)
     {
         //if ($this->_getData($this->containerFilename($id)))
@@ -156,11 +165,19 @@ class OpenstackAccess
         //return false;
     }
 
+    /**
+     * @param string $name
+     * @return \OpenStack\ObjectStore\v1\Models\StorageObject
+     */
     public function getObject($name)
     {
         return $this->container->getObject($name);
     }
 
+    /**
+     * @param string $name
+     * @return string|void
+     */
     public function _getData($name)
     {
         try {
